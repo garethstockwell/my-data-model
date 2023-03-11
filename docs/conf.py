@@ -8,5 +8,6 @@ extensions = [
     "sphinx_click",
     "myst_parser",
 ]
+autodoc_class_signature = "separated"
 autodoc_typehints = "description"
 html_theme = "furo"
