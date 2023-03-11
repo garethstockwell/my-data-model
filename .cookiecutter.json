@@ -1,0 +1,13 @@
+{
+  "_template": ".",
+  "author": "Gareth Stockwell",
+  "copyright_year": "2023",
+  "development_status": "Development Status :: 1 - Planning",
+  "email": "gareth.stockwell@gmail.com",
+  "friendly_name": "My Data Model",
+  "github_user": "garethstockwell",
+  "license": "MIT",
+  "package_name": "my_data_model",
+  "project_name": "my-data-model",
+  "version": "0.0.0"
+}

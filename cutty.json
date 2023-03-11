@@ -1,0 +1,19 @@
+{
+  "template": {
+    "location": ".",
+    "revision": null,
+    "directory": null
+  },
+  "bindings": {
+    "project_name": "my-data-model",
+    "package_name": "my_data_model",
+    "friendly_name": "My Data Model",
+    "author": "Gareth Stockwell",
+    "email": "gareth.stockwell@gmail.com",
+    "github_user": "garethstockwell",
+    "version": "0.0.0",
+    "copyright_year": "2023",
+    "license": "MIT",
+    "development_status": "Development Status :: 1 - Planning"
+  }
+}
