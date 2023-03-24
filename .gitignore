@@ -5,6 +5,7 @@
 /.python-version
 /.pytype/
 /dist/
+/docs/_autosummary/
 /docs/_build/
 /src/*.egg-info/
 __pycache__/

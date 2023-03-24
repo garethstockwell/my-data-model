@@ -3,6 +3,10 @@
 ## my_data_model.models
 
 ```{eval-rst}
-.. automodule:: my_data_model.models
-   :members:
+.. autosummary::
+   :toctree: _autosummary
+   :template: module.rst
+   :recursive:
+
+   my_data_model
 ```
