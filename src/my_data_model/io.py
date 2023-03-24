@@ -3,6 +3,7 @@
 import importlib
 from io import TextIOWrapper
 from typing import Any
+from typing import Optional
 from typing import Union
 
 import yaml
@@ -15,18 +16,12 @@ MODELS_PACKAGE = "my_data_model.models"
 """Package from which models are loaded."""
 
 
-def _get_class(tag: str) -> Any:
-    """Look up class identified by a YAML tag."""
-    if tag.startswith("!"):
-        type_name = f"{MODELS_PACKAGE}.{tag[len(TAG_PREFIX):]}"
-        (module_name, cls_name) = type_name.rsplit(".", maxsplit=1)
-        module = importlib.import_module(module_name)
-        return getattr(module, cls_name)
-    return None
-
-
 class _DeepLoader(yaml.Loader):
     """Override YAML loader."""
+
+    def __init__(self, stream, cls_prefix):
+        super().__init__(stream=stream)
+        self.cls_prefix = cls_prefix
 
     def construct_mapping(self, node: yaml.MappingNode, deep: bool = True) -> Any:
         """Convert mapping node to dict or object.
@@ -70,7 +65,7 @@ class _DeepLoader(yaml.Loader):
             value = self.construct_object(value_node, deep=deep)  # type: ignore
             mapping[key] = value
 
-        cls = _get_class(node.tag)
+        cls = self._get_class(node.tag)
         if cls:
             try:
                 return cls(**mapping)
@@ -82,20 +77,41 @@ class _DeepLoader(yaml.Loader):
                 ) from exc
         return mapping
 
+    def _get_class(self, tag: str) -> Any:
+        """Look up class identified by a YAML tag."""
+        if tag.startswith("!"):
+            type_name = f"{self.cls_prefix}.{tag[len(TAG_PREFIX):]}"
+            (module_name, cls_name) = type_name.rsplit(".", maxsplit=1)
+            module = importlib.import_module(module_name)
+            return getattr(module, cls_name)
+        return None
 
-def load(source: Union[str, TextIOWrapper]) -> Any:
+
+def load(
+    source: Union[str, TextIOWrapper],
+    tag_prefix: Optional[str] = None,
+    cls_prefix: Optional[str] = None,
+) -> Any:
     """Load data from YAML.
 
     Args:
         source: data source
+        tag_prefix: YAML tag prefix
+        cls_prefix: string which is prepended to YAML tag to form class name
     """
+    tag_prefix = tag_prefix or TAG_PREFIX
+    cls_prefix = cls_prefix or MODELS_PACKAGE
+
     loader = _DeepLoader
     loader.add_multi_constructor(
-        tag_prefix=TAG_PREFIX,
+        tag_prefix=tag_prefix,
         multi_constructor=lambda loader, _tag, node: loader.construct_mapping(
             node, deep=True
         ),
     )  # type: ignore
 
+    def make_loader(stream):
+        return _DeepLoader(stream=stream, cls_prefix=cls_prefix)
+
     # The source for the YAML load is a local file whose contents we can trust.
-    return yaml.load(source, Loader=loader)  # nosec B506
+    return yaml.load(source, Loader=make_loader)  # nosec B506
