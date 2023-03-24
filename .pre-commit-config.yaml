@@ -28,6 +28,7 @@ repos:
         entry: check-yaml
         language: system
         types: [yaml]
+        args: [--unsafe]
       - id: darglint
         name: darglint
         entry: darglint

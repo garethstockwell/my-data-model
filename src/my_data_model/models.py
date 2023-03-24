@@ -1,34 +1,17 @@
 """This module contains the data models."""
 
-from collections import Counter
-from typing import Any
-from typing import Iterable
 from typing import List
+from typing import Mapping
 
-from attrs import Attribute
 from attrs import define
 from attrs import field
 from attrs.validators import deep_iterable
 from attrs.validators import instance_of
 
-
-def _unique_names(instance: Any, attribute: Attribute, value: Iterable[Any]) -> None:
-    """Validator which enforces name uniqueness.
-
-    Checks that all entries in an iterable have unique name attributes.
-
-    Args:
-        instance: parent of the attribute
-        attribute: attribute which is being assigned to
-        value: value which is being assigned to the attribute
-    """
-    names = [entry.name for entry in value]
-    dups = [k for k, c in Counter(names).items() if c > 1]
-    if dups:
-        raise ValueError(f"Duplicate names in {attribute.name}: {','.join(dups)}")
+from my_data_model.utils import check_iterable_no_dups
 
 
-@define
+@define(frozen=True, slots=True)
 class Command:
     """A command."""
 
@@ -36,7 +19,7 @@ class Command:
     """Name of the command."""
 
 
-@define
+@define(frozen=True, slots=True)
 class Interface:
     """An interface."""
 
@@ -44,6 +27,18 @@ class Interface:
     """Name of the interface."""
 
     commands: List[Command] = field(
-        validator=[deep_iterable(member_validator=instance_of(Command)), _unique_names]
+        validator=[
+            # Check that members are Command instances
+            deep_iterable(member_validator=instance_of(Command)),
+            # Check that command names are unique
+            lambda instance, attr, value: check_iterable_no_dups(
+                name="command names", data=[cmd.name for cmd in value]
+            ),
+        ]
     )
     """Commands in the interface."""
+
+    @property
+    def commands_dict(self) -> Mapping[str, Command]:
+        """Mapping from command name to command."""
+        return {cmd.name: cmd for cmd in self.commands}

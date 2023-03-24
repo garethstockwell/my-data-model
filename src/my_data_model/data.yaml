@@ -1,0 +1,9 @@
+# Example data
+
+!Interface
+name: iface
+commands:
+  - !Command
+    name: cmd1
+  - !Command
+    name: cmd2

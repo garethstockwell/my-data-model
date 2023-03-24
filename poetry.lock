@@ -1062,7 +1062,7 @@ tokenize-rt = ">=3.2.0"
 name = "pyyaml"
 version = "6.0"
 description = "YAML parser and emitter for Python"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.6"
 files = [
@@ -1732,4 +1732,4 @@ testing = ["func-timeout", "jaraco.itertools", "pytest (>=6)", "pytest-black (>=
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.7"
-content-hash = "f2ef37f2faaca387fa623c069bdf364821e1307e6fe4ede83bcf9ffd9116f716"
+content-hash = "22d6cb8d468f97ef2dc7e68a22eceb8980e75cf8a054143969de2001ae271cfa"
