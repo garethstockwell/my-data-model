@@ -125,6 +125,9 @@ def load(
         source: data source
         package: package from which models are loaded, defaults to
                  :const:`~my_data_model.io.DEFAULT_PACKAGE`
+
+    Returns:
+        Data loaded from YAML
     """
     my_package = package or DEFAULT_PACKAGE
 

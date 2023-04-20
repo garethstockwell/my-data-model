@@ -11,6 +11,9 @@ def check_iterable_no_dups(name: str, data: Iterable[Any]) -> None:
     Args:
         name: name of collection
         data: the collection
+
+    Raises:
+        ValueError: if collection contains duplicate elements
     """
     dups = [item for item, count in Counter(data).items() if count > 1]
     if dups:
