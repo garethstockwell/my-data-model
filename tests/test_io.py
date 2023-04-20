@@ -109,3 +109,15 @@ def test_load_failed_construct() -> None:
         match="got an unexpected keyword argument 'foo'",
     ):
         io.load(source=source, cls_prefix=__name__)
+
+
+def test_load_invalid_include() -> None:
+    """Test load failure due to invalid usage of include directive."""
+    source = """
+    !include foo.yaml
+    """
+    with pytest.raises(
+        yaml.constructor.ConstructorError,
+        match="Include directive not supported for f<unicode string> loader",
+    ):
+        io.load(source=source, cls_prefix=__name__)

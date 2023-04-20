@@ -7,3 +7,4 @@ commands:
     name: cmd1
   - !Command
     name: cmd2
+  - !include commands/cmd3.yaml
