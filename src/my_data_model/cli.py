@@ -13,11 +13,11 @@ from my_data_model.io import load
 DEFAULT_DATA_PATH = Path(os.path.dirname(__file__)) / "data" / "model.yaml"
 
 
-def _log_init(verbose: bool):
+def _log_init(verbose: bool) -> None:
     """Initialize logging."""
 
     class Formatter(logging.Formatter):
-        def format(self, record):  # pragma: no cover
+        def format(self, record):  # type: ignore # pragma: no cover
             format = "%(message)s"
             if record.levelno != logging.INFO:
                 format = "[%(levelname)s] " + format

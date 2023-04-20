@@ -25,7 +25,7 @@ DEFAULT_PACKAGE = "my_data_model.models"
 class _YamlLoader(yaml.Loader):
     """Override YAML loader."""
 
-    def __init__(self, stream, package):
+    def __init__(self, stream: TextIOWrapper, package: str):
         """Create YAML loader."""
         super().__init__(stream=stream)
         self.package = package
@@ -95,9 +95,9 @@ class _YamlLoader(yaml.Loader):
             return getattr(module, cls_name)
         return None
 
-    def include(self, node: yaml.Node) -> Any:
+    def include(self, node: yaml.ScalarNode) -> Any:
         """Process an include directive."""
-        path = self.construct_scalar(node)
+        path = str(self.construct_scalar(node))
 
         LOGGER.debug(f"_YamlLoader.include self.name={self.name} path={path}")
 
@@ -106,13 +106,13 @@ class _YamlLoader(yaml.Loader):
                 f"Include directive not supported for f{self.name} loader"
             )
 
-        abs_path = Path(os.path.dirname(self.name)) / self.construct_scalar(node)
+        abs_path = Path(os.path.dirname(self.name)) / path
 
-        def make_loader(stream):
+        def make_loader(stream: TextIOWrapper) -> yaml.Loader:
             return _YamlLoader(stream=stream, package=self.package)
 
         with open(abs_path) as stream:
-            return yaml.load(stream, Loader=make_loader)  # nosec B506
+            return yaml.load(stream, Loader=make_loader)  # type: ignore # nosec B506
 
 
 def load(
@@ -126,7 +126,7 @@ def load(
         package: package from which models are loaded, defaults to
                  :const:`~my_data_model.io.DEFAULT_PACKAGE`
     """
-    package = package or DEFAULT_PACKAGE
+    my_package = package or DEFAULT_PACKAGE
 
     loader = _YamlLoader
 
@@ -139,8 +139,7 @@ def load(
         ),
     )  # type: ignore
 
-    def make_loader(stream):
-        return _YamlLoader(stream=stream, package=package)
+    def make_loader(stream: TextIOWrapper) -> yaml.Loader:
+        return _YamlLoader(stream=stream, package=my_package)
 
-    # The source for the YAML load is a local file whose contents we can trust.
-    return yaml.load(source, Loader=make_loader)  # nosec B506
+    return yaml.load(source, Loader=make_loader)  # type: ignore # nosec B506

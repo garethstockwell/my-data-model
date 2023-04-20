@@ -1,10 +1,12 @@
 """Test cases for the models module."""
 
 from typing import Any
+from typing import Mapping
 
 import pytest
 
 from my_data_model import models
+from my_data_model.models import Command
 from my_data_model.models import Interface
 
 
@@ -157,7 +159,9 @@ def test_construct_invalid_value(cls: type, kwargs: dict[str, Any], msg: str) ->
         ),
     ],
 )
-def test_interface_commands_dict(kwargs: dict[str, Any], result: list[str]) -> None:
+def test_interface_commands_dict(
+    kwargs: dict[str, Any], result: Mapping[str, Command]
+) -> None:
     """Test execution of Interface.commands_dict.
 
     Args:
