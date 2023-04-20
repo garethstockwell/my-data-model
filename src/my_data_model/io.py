@@ -15,20 +15,20 @@ import yaml
 LOGGER = logging.getLogger(__name__)
 
 
-TAG_PREFIX = "!"
+_TAG_PREFIX = "!"
 """Prefix for YAML tags."""
 
-MODELS_PACKAGE = "my_data_model.models"
-"""Package from which models are loaded."""
+DEFAULT_PACKAGE = "my_data_model.models"
+"""Default package from which models are loaded."""
 
 
-class YamlLoader(yaml.Loader):
+class _YamlLoader(yaml.Loader):
     """Override YAML loader."""
 
-    def __init__(self, stream, cls_prefix):
+    def __init__(self, stream, package):
         """Create YAML loader."""
         super().__init__(stream=stream)
-        self.cls_prefix = cls_prefix
+        self.package = package
 
     def construct_mapping(self, node: yaml.MappingNode, deep: bool = True) -> Any:
         """Convert mapping node to dict or object.
@@ -42,7 +42,7 @@ class YamlLoader(yaml.Loader):
 
         3. Construct objects based on the tag.
         """
-        LOGGER.debug(f"YamlLoader.construct_mapping node={node}")
+        LOGGER.debug(f"_YamlLoader.construct_mapping node={node}")
 
         if not isinstance(node, yaml.MappingNode):
             raise yaml.constructor.ConstructorError(
@@ -89,7 +89,7 @@ class YamlLoader(yaml.Loader):
     def _get_class(self, tag: str) -> Any:
         """Look up class identified by a YAML tag."""
         if tag.startswith("!"):
-            type_name = f"{self.cls_prefix}.{tag[len(TAG_PREFIX):]}"
+            type_name = f"{self.package}.{tag[len(_TAG_PREFIX):]}"
             (module_name, cls_name) = type_name.rsplit(".", maxsplit=1)
             module = importlib.import_module(module_name)
             return getattr(module, cls_name)
@@ -99,7 +99,7 @@ class YamlLoader(yaml.Loader):
         """Process an include directive."""
         path = self.construct_scalar(node)
 
-        LOGGER.debug(f"YamlLoader.include self.name={self.name} path={path}")
+        LOGGER.debug(f"_YamlLoader.include self.name={self.name} path={path}")
 
         if self.name in ["<unicode string>", "<byte string>", "<file>"]:
             raise yaml.constructor.ConstructorError(
@@ -109,7 +109,7 @@ class YamlLoader(yaml.Loader):
         abs_path = Path(os.path.dirname(self.name)) / self.construct_scalar(node)
 
         def make_loader(stream):
-            return YamlLoader(stream=stream, cls_prefix=self.cls_prefix)
+            return _YamlLoader(stream=stream, package=self.package)
 
         with open(abs_path) as stream:
             return yaml.load(stream, Loader=make_loader)  # nosec B506
@@ -117,30 +117,30 @@ class YamlLoader(yaml.Loader):
 
 def load(
     source: Union[str, TextIOWrapper],
-    cls_prefix: Optional[str] = None,
+    package: Optional[str] = None,
 ) -> Any:
     """Load data from YAML.
 
     Args:
         source: data source
-        cls_prefix: string which is prepended to YAML tag to form class name
-        include_base: base directory for include directives
+        package: package from which models are loaded, defaults to
+                 :const:`~my_data_model.io.DEFAULT_PACKAGE`
     """
-    cls_prefix = cls_prefix or MODELS_PACKAGE
+    package = package or DEFAULT_PACKAGE
 
-    loader = YamlLoader
+    loader = _YamlLoader
 
     loader.add_constructor("!include", loader.include)
 
     loader.add_multi_constructor(
-        tag_prefix=TAG_PREFIX,
+        tag_prefix=_TAG_PREFIX,
         multi_constructor=lambda loader, _tag, node: loader.construct_mapping(
             node, deep=True
         ),
     )  # type: ignore
 
     def make_loader(stream):
-        return YamlLoader(stream=stream, cls_prefix=cls_prefix)
+        return _YamlLoader(stream=stream, package=package)
 
     # The source for the YAML load is a local file whose contents we can trust.
     return yaml.load(source, Loader=make_loader)  # nosec B506

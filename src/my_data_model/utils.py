@@ -6,7 +6,12 @@ from typing import Iterable
 
 
 def check_iterable_no_dups(name: str, data: Iterable[Any]) -> None:
-    """Check that all elements of a collection are unique."""
+    """Check that all elements of a collection are unique.
+
+    Args:
+        name: name of collection
+        data: the collection
+    """
     dups = [item for item, count in Counter(data).items() if count > 1]
     if dups:
         raise ValueError(f"{name} contains duplicate values: " + ", ".join(dups))
