@@ -17,7 +17,7 @@ def _log_init(verbose: bool):
     """Initialize logging."""
 
     class Formatter(logging.Formatter):
-        def format(self, record):
+        def format(self, record):  # pragma: no cover
             format = "%(message)s"
             if record.levelno != logging.INFO:
                 format = "[%(levelname)s] " + format

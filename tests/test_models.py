@@ -5,6 +5,7 @@ from typing import Any
 import pytest
 
 from my_data_model import models
+from my_data_model.models import Interface
 
 
 @pytest.mark.parametrize(
@@ -118,3 +119,50 @@ def test_construct_invalid_value(cls: type, kwargs: dict[str, Any], msg: str) ->
     """
     with pytest.raises(ValueError, match=msg):
         cls(**kwargs)
+
+
+@pytest.mark.parametrize(
+    "kwargs, result",
+    [
+        (
+            {
+                "name": "my-iface",
+                "commands": [],
+            },
+            {},
+        ),
+        (
+            {
+                "name": "my-iface",
+                "commands": [
+                    models.Command(name="cmd1"),
+                ],
+            },
+            {
+                "cmd1": models.Command(name="cmd1"),
+            },
+        ),
+        (
+            {
+                "name": "my-iface",
+                "commands": [
+                    models.Command(name="cmd1"),
+                    models.Command(name="cmd2"),
+                ],
+            },
+            {
+                "cmd1": models.Command(name="cmd1"),
+                "cmd2": models.Command(name="cmd2"),
+            },
+        ),
+    ],
+)
+def test_interface_commands_dict(kwargs: dict[str, Any], result: list[str]) -> None:
+    """Test execution of Interface.commands_dict.
+
+    Args:
+        kwargs: dictionary of kwargs passed to constructor
+        result: expected result
+    """
+    iface = Interface(**kwargs)
+    assert iface.commands_dict == result
