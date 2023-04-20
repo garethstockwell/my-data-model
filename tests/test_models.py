@@ -104,7 +104,7 @@ def test_construct_invalid_type(cls: type, kwargs: dict[str, Any], msg: str) -> 
                     models.Command(name="my-cmd"),
                 ],
             },
-            "Duplicate names in commands: my-cmd",
+            "command names contains duplicate values: my-cmd",
         ),
     ],
 )
