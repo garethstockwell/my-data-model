@@ -89,22 +89,19 @@ class _DeepLoader(yaml.Loader):
 
 def load(
     source: Union[str, TextIOWrapper],
-    tag_prefix: Optional[str] = None,
     cls_prefix: Optional[str] = None,
 ) -> Any:
     """Load data from YAML.
 
     Args:
         source: data source
-        tag_prefix: YAML tag prefix
         cls_prefix: string which is prepended to YAML tag to form class name
     """
-    tag_prefix = tag_prefix or TAG_PREFIX
     cls_prefix = cls_prefix or MODELS_PACKAGE
 
     loader = _DeepLoader
     loader.add_multi_constructor(
-        tag_prefix=tag_prefix,
+        tag_prefix=TAG_PREFIX,
         multi_constructor=lambda loader, _tag, node: loader.construct_mapping(
             node, deep=True
         ),
