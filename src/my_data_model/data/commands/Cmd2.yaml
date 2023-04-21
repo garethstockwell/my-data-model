@@ -1,0 +1,5 @@
+!commands.Command
+name: cmd2
+description: Example command 1
+
+inputs: {}

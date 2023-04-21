@@ -1,0 +1,4 @@
+!types.Address
+name: Address
+description: An address
+width: 64

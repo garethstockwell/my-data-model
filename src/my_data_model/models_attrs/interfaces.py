@@ -15,9 +15,6 @@ from my_data_model.utils import check_iterable_no_dups
 class Interface:
     """An interface."""
 
-    name: str = field(validator=[instance_of(str)])
-    """Name of the interface."""
-
     commands: List[Command] = field(
         validator=[
             # Check that members are Command instances
@@ -29,3 +26,6 @@ class Interface:
         ]
     )
     """Commands in the interface."""
+
+    name: str = field(validator=[instance_of(str)])
+    """Name of the interface."""

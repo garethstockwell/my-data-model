@@ -1,0 +1,14 @@
+!commands.Command
+name: Cmd1
+description: Example command 1
+
+inputs:
+  X0: !commands.CommandValue
+    name: in1
+    description: Input 1
+    type: !include ../types/Address.yaml
+
+  X1: !commands.CommandValue
+    name: in2
+    description: Input 2
+    type: !include ../types/Bits64.yaml

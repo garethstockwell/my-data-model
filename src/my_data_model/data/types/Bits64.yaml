@@ -1,0 +1,4 @@
+!types.Bits
+name: Bits64
+description: A 64-bit bitfield
+width: 64

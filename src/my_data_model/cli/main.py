@@ -12,9 +12,7 @@ import click
 from my_data_model.io import load
 
 
-DEFAULT_DATA_PATH = (
-    Path(os.path.dirname(__file__)) / os.path.pardir / "data" / "model.yaml"
-)
+DEFAULT_DATA_PATH = Path(os.path.dirname(__file__)).parent / "data" / "model.yaml"
 
 
 def _log_init(verbose: bool) -> None:

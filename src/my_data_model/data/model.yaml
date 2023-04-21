@@ -1,10 +1,7 @@
 # Example data
 
 !interfaces.Interface
-name: iface
+name: Iface1
 commands:
-  - !commands.Command
-    name: cmd1
-  - !commands.Command
-    name: cmd2
-  - !include commands/cmd3.yaml
+  - !include commands/Cmd1.yaml
+  - !include commands/Cmd2.yaml

@@ -120,7 +120,7 @@ class _YamlLoader(yaml.Loader):
                 note=None,
             )
 
-        abs_path = Path(os.path.dirname(self.name)) / path
+        abs_path = (Path(os.path.dirname(self.name)) / path).resolve()
 
         def make_loader(stream: IOBase) -> yaml.Loader:
             return _YamlLoader(stream=stream, package=self.package)
