@@ -12,7 +12,15 @@ def runner() -> CliRunner:
     return CliRunner()
 
 
-def test_main_succeeds(runner: CliRunner) -> None:
+@pytest.mark.parametrize(
+    "args",
+    [
+        [],
+        ["dump"],
+        ["dump", "--verbose"],
+    ],
+)
+def test_main_succeeds(runner: CliRunner, args) -> None:
     """It exits with a status code of zero."""
-    result = runner.invoke(cli.main)
+    result = runner.invoke(cli.main, *args)
     assert result.exit_code == 0

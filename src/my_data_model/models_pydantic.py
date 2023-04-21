@@ -41,3 +41,4 @@ class Interface:
     ) -> None:
         """Check that command names are unique."""
         check_iterable_no_dups(name="command names", data=[cmd.name for cmd in value])
+        return value
