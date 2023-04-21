@@ -53,7 +53,7 @@ def test_load_invalid_tag() -> None:
     foo: bar
     """
     with pytest.raises(
-        AttributeError, match=f"module '{__name__!r}' has no attribute 'InvalidTag'"
+        AttributeError, match=f"module {__name__!r} has no attribute 'InvalidTag'"
     ):
         io.load(source=source, package=__name__)
 
