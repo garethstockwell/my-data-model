@@ -44,7 +44,10 @@ def _log_init(verbose: bool) -> None:
 def main(data_path: str, verbose: bool) -> None:
     """My Data Model."""
     _log_init(verbose)
-    data = load(open(data_path))
+
+    with open(data_path) as stream:
+        data = load(stream=stream)
+
     print(data)
 
 

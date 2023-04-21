@@ -1,5 +1,7 @@
 """Test cases for the io module."""
 
+from io import StringIO
+from typing import Any
 from typing import List
 from typing import Mapping
 
@@ -26,6 +28,12 @@ class MockCollection:
     """Objects in the collection."""
 
 
+def load_str(source: str) -> Any:
+    """Helper for loading data from a string."""
+    with StringIO(source) as stream:
+        return io.load(stream=stream, package=__name__)
+
+
 def test_load_ok() -> None:
     """Test successful load."""
     source = """
@@ -38,7 +46,7 @@ def test_load_ok() -> None:
       attrs:
         yah: gah
     """
-    data = io.load(source=source, package=__name__)
+    data = load_str(source=source)
     assert isinstance(data, MockCollection)
     assert data.objects == [
         MockObject(attrs={"foo": "bar"}),
@@ -55,7 +63,7 @@ def test_load_invalid_tag() -> None:
     with pytest.raises(
         AttributeError, match=f"module {__name__!r} has no attribute 'InvalidTag'"
     ):
-        io.load(source=source, package=__name__)
+        load_str(source=source)
 
 
 def test_load_invalid_node_type() -> None:
@@ -68,7 +76,7 @@ def test_load_invalid_node_type() -> None:
         yaml.constructor.ConstructorError,
         match="expected a mapping node, but found sequence",
     ):
-        io.load(source=source, package=__name__)
+        load_str(source=source)
 
 
 def test_load_invalid_key() -> None:
@@ -81,7 +89,7 @@ def test_load_invalid_key() -> None:
         yaml.constructor.ConstructorError,
         match="found unacceptable key \\(unhashable type: 'list'\\)",
     ):
-        io.load(source=source, package=__name__)
+        load_str(source=source)
 
 
 def test_load_duplicate_key() -> None:
@@ -95,7 +103,7 @@ def test_load_duplicate_key() -> None:
         yaml.constructor.ConstructorError,
         match="found duplicate key",
     ):
-        io.load(source=source, package=__name__)
+        load_str(source=source)
 
 
 def test_load_failed_construct() -> None:
@@ -108,7 +116,7 @@ def test_load_failed_construct() -> None:
         TypeError,
         match="got an unexpected keyword argument 'foo'",
     ):
-        io.load(source=source, package=__name__)
+        load_str(source=source)
 
 
 def test_load_invalid_include() -> None:
@@ -118,6 +126,6 @@ def test_load_invalid_include() -> None:
     """
     with pytest.raises(
         yaml.constructor.ConstructorError,
-        match="Include directive not supported for f<unicode string> loader",
+        match="Include directive not supported for f<file> loader",
     ):
-        io.load(source=source, package=__name__)
+        load_str(source=source)

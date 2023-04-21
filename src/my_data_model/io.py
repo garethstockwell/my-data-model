@@ -3,11 +3,10 @@
 import importlib
 import logging
 import os
-from io import TextIOWrapper
+from io import IOBase
 from pathlib import Path
 from typing import Any
 from typing import Optional
-from typing import Union
 
 import yaml
 
@@ -25,12 +24,12 @@ DEFAULT_PACKAGE = "my_data_model.models_attrs"
 class _YamlLoader(yaml.Loader):
     """Override YAML loader."""
 
-    def __init__(self, stream: TextIOWrapper, package: str):
+    def __init__(self, stream: IOBase, package: str):
         """Create YAML loader."""
         super().__init__(stream=stream)
         self.package = package
 
-    def construct_mapping(self, node: yaml.MappingNode, deep: bool = True) -> Any:
+    def construct_mapping(self, node: yaml.Node, deep: bool = True) -> Any:
         """Convert mapping node to dict or object.
 
         Override yaml.Loader for the following reasons:
@@ -48,7 +47,7 @@ class _YamlLoader(yaml.Loader):
             raise yaml.constructor.ConstructorError(
                 None,
                 None,
-                "expected a mapping node, but found %s" % node.id,
+                "expected a mapping node, but found %s" % node.id,  # type: ignore
                 node.start_mark,
             )
 
@@ -108,21 +107,23 @@ class _YamlLoader(yaml.Loader):
 
         abs_path = Path(os.path.dirname(self.name)) / path
 
-        def make_loader(stream: TextIOWrapper) -> yaml.Loader:
+        def make_loader(stream: IOBase) -> yaml.Loader:
             return _YamlLoader(stream=stream, package=self.package)
 
         with open(abs_path) as stream:
-            return yaml.load(stream, Loader=make_loader)  # type: ignore # nosec B506
+            return yaml.load(
+                stream=stream, Loader=make_loader  # type: ignore # nosec B506
+            )
 
 
 def load(
-    source: Union[str, TextIOWrapper],
+    stream: IOBase,
     package: Optional[str] = None,
 ) -> Any:
     """Load data from YAML.
 
     Args:
-        source: data source
+        stream: data source
         package: package from which models are loaded, defaults to
                  :const:`~my_data_model.io.DEFAULT_PACKAGE`
 
@@ -142,7 +143,7 @@ def load(
         ),
     )  # type: ignore
 
-    def make_loader(stream: TextIOWrapper) -> yaml.Loader:
+    def make_loader(stream: IOBase) -> yaml.Loader:
         return _YamlLoader(stream=stream, package=my_package)
 
-    return yaml.load(source, Loader=make_loader)  # type: ignore # nosec B506
+    return yaml.load(stream=stream, Loader=make_loader)  # type: ignore # nosec B506
