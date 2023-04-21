@@ -18,7 +18,7 @@ LOGGER = logging.getLogger(__name__)
 _TAG_PREFIX = "!"
 """Prefix for YAML tags."""
 
-DEFAULT_PACKAGE = "my_data_model.models"
+DEFAULT_PACKAGE = "my_data_model.models_attrs"
 """Default package from which models are loaded."""
 
 

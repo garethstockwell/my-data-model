@@ -1,12 +1,12 @@
-"""Test cases for the models module."""
+"""Test cases for the models_attrs module."""
 
 from typing import Any
 from typing import Mapping
 
 import pytest
 
-from my_data_model.models import Command
-from my_data_model.models import Interface
+from my_data_model.models_attrs import Command
+from my_data_model.models_attrs import Interface
 
 
 @pytest.mark.parametrize(
@@ -71,7 +71,7 @@ def test_construct_good(cls: type, kwargs: dict[str, Any]) -> None:
         (
             Interface,
             {"name": "my-iface", "commands": ["foo"]},
-            "'commands' must be <class 'my_data_model.models.Command'>",
+            "'commands' must be <class 'my_data_model.models_attrs.Command'>",
         ),
         # An interface with an additional invalid argument
         (
