@@ -20,7 +20,7 @@ class Interface:
     """Name of the interface."""
 
     @field_validator("commands")
-    def command_names_unique(
+    def _command_names_unique(
         cls, value: List[Command]  # noqa: B902,N805
     ) -> List[Command]:
         """Check that command names are unique."""

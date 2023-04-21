@@ -37,7 +37,7 @@ class Command:
     """Name of the command."""
 
     @field_validator("inputs")
-    def validate_inputs(
+    def _validate_inputs(
         cls, value: Mapping[str, CommandValue]  # noqa: B902,N805
     ) -> Mapping[str, CommandValue]:
         """Validate inputs."""

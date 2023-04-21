@@ -26,7 +26,7 @@ class _WidthTemplatedType(Type):
     """Width of the type in bits."""
 
     @field_validator("width")
-    def width_positive(cls, value: int) -> int:  # noqa: B902,N805
+    def _width_positive(cls, value: int) -> int:  # noqa: B902,N805
         """Check that width is positive."""
         if value <= 0:
             raise ValueError("width is not positive")
@@ -60,7 +60,7 @@ class Array(Type):
     """Type of elements in the array."""
 
     @field_validator("size")
-    def size_non_negative(cls, value: int) -> int:  # noqa: B902,N805
+    def _size_non_negative(cls, value: int) -> int:  # noqa: B902,N805
         """Check that size is not negative."""
         if value < 0:
             raise ValueError("size is negative")
