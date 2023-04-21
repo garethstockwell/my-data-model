@@ -8,7 +8,7 @@ import pytest
 from pydantic import ValidationError
 
 from my_data_model.models_pydantic.commands import Command
-from my_data_model.models_pydantic.commands import Interface
+from my_data_model.models_pydantic.interfaces import Interface
 
 
 @pytest.mark.parametrize(

@@ -6,7 +6,7 @@ from typing import Mapping
 import pytest
 
 from my_data_model.models_attrs.commands import Command
-from my_data_model.models_attrs.commands import Interface
+from my_data_model.models_attrs.interfaces import Interface
 
 
 @pytest.mark.parametrize(

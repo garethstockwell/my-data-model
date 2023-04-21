@@ -1,4 +1,4 @@
-"""pydantic configuration."""
+"""Common code shared across pydantic models."""
 
 from typing import Any
 
