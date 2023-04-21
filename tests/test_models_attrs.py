@@ -1,6 +1,7 @@
 """Test cases for the models_attrs module."""
 
 from typing import Any
+from typing import Mapping
 
 import pytest
 
@@ -33,7 +34,7 @@ from my_data_model.models_attrs import Interface
         ),
     ],
 )
-def test_construct_good(cls: type, kwargs: dict[str, Any]) -> None:
+def test_construct_good(cls: type, kwargs: Mapping[str, Any]) -> None:
     """Test successful construction of models.
 
     Args:
@@ -80,7 +81,7 @@ def test_construct_good(cls: type, kwargs: dict[str, Any]) -> None:
         ),
     ],
 )
-def test_construct_invalid_type(cls: type, kwargs: dict[str, Any], msg: str) -> None:
+def test_construct_invalid_type(cls: type, kwargs: Mapping[str, Any], msg: str) -> None:
     """Test failed construction of models due to invalid argument type(s).
 
     Args:
@@ -109,7 +110,9 @@ def test_construct_invalid_type(cls: type, kwargs: dict[str, Any], msg: str) -> 
         ),
     ],
 )
-def test_construct_invalid_value(cls: type, kwargs: dict[str, Any], msg: str) -> None:
+def test_construct_invalid_value(
+    cls: type, kwargs: Mapping[str, Any], msg: str
+) -> None:
     """Test failed construction of models due to invalid argument value(s).
 
     Args:
