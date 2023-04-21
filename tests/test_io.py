@@ -87,7 +87,7 @@ def test_load_invalid_key() -> None:
     """
     with pytest.raises(
         yaml.constructor.ConstructorError,
-        match="found unacceptable key \\(unhashable type: 'list'\\)",
+        match="found unacceptable key ['foo']",
     ):
         load_str(source=source)
 
@@ -101,7 +101,7 @@ def test_load_duplicate_key() -> None:
     """
     with pytest.raises(
         yaml.constructor.ConstructorError,
-        match="found duplicate key",
+        match="found duplicate key 'foo'",
     ):
         load_str(source=source)
 
@@ -113,7 +113,7 @@ def test_load_failed_construct() -> None:
     foo: bar
     """
     with pytest.raises(
-        TypeError,
+        yaml.constructor.ConstructorError,
         match="got an unexpected keyword argument 'foo'",
     ):
         load_str(source=source)
@@ -126,6 +126,6 @@ def test_load_invalid_include() -> None:
     """
     with pytest.raises(
         yaml.constructor.ConstructorError,
-        match="Include directive not supported for f<file> loader",
+        match="'!include' tag not supported for f<file> loader",
     ):
         load_str(source=source)

@@ -45,31 +45,38 @@ class _YamlLoader(yaml.Loader):
 
         if not isinstance(node, yaml.MappingNode):
             raise yaml.constructor.ConstructorError(
-                None,
-                None,
-                "expected a mapping node, but found %s" % node.id,  # type: ignore
-                node.start_mark,
+                context=None,
+                context_mark=None,
+                problem=f"expected a mapping node, but found {node.id}",  # type: ignore
+                problem_mark=node.start_mark,
+                note=None,
             )
 
         mapping = {}
+
         for key_node, value_node in node.value:
             key = self.construct_object(key_node, deep=deep)  # type: ignore
+
             try:
                 hash(key)
             except TypeError as exc:
                 raise yaml.constructor.ConstructorError(
-                    "while constructing a mapping",
-                    node.start_mark,
-                    "found unacceptable key (%s)" % exc,
-                    key_node.start_mark,
+                    context="while constructing a mapping",
+                    context_mark=node.start_mark,
+                    problem=f"found unacceptable key '{key}' ({exc})",  # noqa: B907
+                    problem_mark=key_node.start_mark,
+                    note=None,
                 ) from exc
+
             if key in mapping:
                 raise yaml.constructor.ConstructorError(
-                    "while constructing a mapping starting at",
-                    node.start_mark,
-                    "found duplicate key at",
-                    key_node.start_mark,
+                    context="while constructing a mapping",
+                    context_mark=node.start_mark,
+                    problem=f"found duplicate key '{key}'",  # noqa: B907
+                    problem_mark=key_node.start_mark,
+                    note=None,
                 )
+
             value = self.construct_object(value_node, deep=deep)  # type: ignore
             mapping[key] = value
 
@@ -78,11 +85,14 @@ class _YamlLoader(yaml.Loader):
             try:
                 return cls(**mapping)
             except Exception as exc:
-                raise exc.__class__(
-                    f"Failed to create object of type {cls.__module__}.{cls.__name__}\n"
-                    f"from arguments {mapping}\n"
-                    f"because {exc}"
+                raise yaml.constructor.ConstructorError(
+                    context=None,
+                    context_mark=None,
+                    problem=f"failed to create {cls.__module__}.{cls.__name__}:\n{exc}",
+                    problem_mark=node.start_mark,
+                    note=None,
                 ) from exc
+
         return mapping
 
     def _get_class(self, tag: str) -> Any:
@@ -92,6 +102,7 @@ class _YamlLoader(yaml.Loader):
             (module_name, cls_name) = type_name.rsplit(".", maxsplit=1)
             module = importlib.import_module(module_name)
             return getattr(module, cls_name)
+
         return None
 
     def include(self, node: yaml.ScalarNode) -> Any:
@@ -102,7 +113,11 @@ class _YamlLoader(yaml.Loader):
 
         if self.name in ["<unicode string>", "<byte string>", "<file>"]:
             raise yaml.constructor.ConstructorError(
-                f"Include directive not supported for f{self.name} loader"
+                context=None,
+                context_mark=None,
+                problem=f"'!include' tag not supported for f{self.name} loader",
+                problem_mark=node.start_mark,
+                note=None,
             )
 
         abs_path = Path(os.path.dirname(self.name)) / path

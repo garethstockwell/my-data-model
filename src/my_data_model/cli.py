@@ -40,13 +40,26 @@ def _log_init(verbose: bool) -> None:
     default=DEFAULT_DATA_PATH,
     show_default=True,
 )
+@click.option(
+    "-p",
+    "--package",
+    "package",
+    help="Models package",
+    type=click.Choice(["attrs", "pydantic"]),
+    default="attrs",
+    show_default=True,
+)
 @click.option("-v", "--verbose", is_flag=True)
-def main(data_path: str, verbose: bool) -> None:
+def main(data_path: str, package: str, verbose: bool) -> None:
     """My Data Model."""
     _log_init(verbose)
 
+    package = f"my_data_model.models_{package}"
+
+    print(f"Loading models from package {package} ...")
+
     with open(data_path) as stream:
-        data = load(stream=stream)
+        data = load(stream=stream, package=package)
 
     print(data)
 

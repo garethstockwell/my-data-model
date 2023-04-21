@@ -1,4 +1,4 @@
-"""This module contains the data models."""
+"""This module contains the data models, defined using attrs."""
 
 from typing import List
 

@@ -49,6 +49,12 @@ def test_construct_good(cls: type, kwargs: Mapping[str, Any]) -> None:
     [
         # A command with no name
         (Command, {}, "missing 1 required positional argument: 'name'"),
+        # A command with a name of the incorrect type
+        (
+            Command,
+            {"name": 123},
+            "'name' must be <class 'str'>",
+        ),
         # A command with an additional invalid argument
         (
             Command,
@@ -60,6 +66,12 @@ def test_construct_good(cls: type, kwargs: Mapping[str, Any]) -> None:
             Interface,
             {"commands": []},
             "missing 1 required positional argument: 'name'",
+        ),
+        # An interface with a name of the incorrect type
+        (
+            Interface,
+            {"name": 123, "commands": []},
+            "'name' must be <class 'str'>",
         ),
         # An interface with no commands
         (
