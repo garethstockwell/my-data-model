@@ -5,8 +5,8 @@ from typing import Mapping
 
 import pytest
 
-from my_data_model.models_attrs import Command
-from my_data_model.models_attrs import Interface
+from my_data_model.models_attrs.commands import Command
+from my_data_model.models_attrs.commands import Interface
 
 
 @pytest.mark.parametrize(
@@ -83,7 +83,7 @@ def test_construct_good(cls: type, kwargs: Mapping[str, Any]) -> None:
         (
             Interface,
             {"name": "my-iface", "commands": ["foo"]},
-            "'commands' must be <class 'my_data_model.models_attrs.Command'>",
+            "'commands' must be <class 'my_data_model.models_attrs.commands.Command'>",
         ),
         # An interface with an additional invalid argument
         (

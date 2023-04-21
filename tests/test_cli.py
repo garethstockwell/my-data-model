@@ -1,5 +1,7 @@
 """Test cases for the cli module."""
 
+from typing import List
+
 import pytest
 from click.testing import CliRunner
 
@@ -20,7 +22,7 @@ def runner() -> CliRunner:
         ["dump", "--verbose"],
     ],
 )
-def test_main_succeeds(runner: CliRunner, args) -> None:
+def test_main_succeeds(runner: CliRunner, args: List[str]) -> None:
     """It exits with a status code of zero."""
-    result = runner.invoke(cli.main, *args)
+    result = runner.invoke(cli=cli.main, args=args)
     assert result.exit_code == 0

@@ -1,23 +1,14 @@
-"""This module contains the data models, defined using pydantic."""
+"""Commands."""
 
 from typing import List
 
-from pydantic import Extra
-from pydantic import validator
-from pydantic.dataclasses import dataclass
+from pydantic import field_validator
 
+from my_data_model.models_pydantic.common import model
 from my_data_model.utils import check_iterable_no_dups
 
 
-class Config:
-    """Configuration of dataclasses."""
-
-    extra = Extra.forbid
-    frozen = True
-    validate_default = True
-
-
-@dataclass(config=Config)
+@model
 class Command:
     """A command."""
 
@@ -25,7 +16,7 @@ class Command:
     """Name of the command."""
 
 
-@dataclass(config=Config)
+@model
 class Interface:
     """An interface."""
 
@@ -35,10 +26,10 @@ class Interface:
     commands: List[Command]
     """Commands in the interface."""
 
-    @validator("commands")
+    @field_validator("commands")
     def command_names_unique(
         cls, value: List[Command]  # types: ignore  # noqa: B902,N805
-    ) -> None:
+    ) -> List[Command]:
         """Check that command names are unique."""
         check_iterable_no_dups(name="command names", data=[cmd.name for cmd in value])
         return value
