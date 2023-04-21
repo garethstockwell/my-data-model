@@ -1,7 +1,6 @@
 """This module contains the data models."""
 
 from typing import List
-from typing import Mapping
 
 from attrs import define
 from attrs import field
@@ -37,8 +36,3 @@ class Interface:
         ]
     )
     """Commands in the interface."""
-
-    @property
-    def commands_dict(self) -> Mapping[str, Command]:
-        """Mapping from command name to command."""
-        return {cmd.name: cmd for cmd in self.commands}

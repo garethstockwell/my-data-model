@@ -1,7 +1,6 @@
 """Test cases for the models_attrs module."""
 
 from typing import Any
-from typing import Mapping
 
 import pytest
 
@@ -120,52 +119,3 @@ def test_construct_invalid_value(cls: type, kwargs: dict[str, Any], msg: str) ->
     """
     with pytest.raises(ValueError, match=msg):
         cls(**kwargs)
-
-
-@pytest.mark.parametrize(
-    "kwargs, result",
-    [
-        (
-            {
-                "name": "my-iface",
-                "commands": [],
-            },
-            {},
-        ),
-        (
-            {
-                "name": "my-iface",
-                "commands": [
-                    Command(name="cmd1"),
-                ],
-            },
-            {
-                "cmd1": Command(name="cmd1"),
-            },
-        ),
-        (
-            {
-                "name": "my-iface",
-                "commands": [
-                    Command(name="cmd1"),
-                    Command(name="cmd2"),
-                ],
-            },
-            {
-                "cmd1": Command(name="cmd1"),
-                "cmd2": Command(name="cmd2"),
-            },
-        ),
-    ],
-)
-def test_interface_commands_dict(
-    kwargs: dict[str, Any], result: Mapping[str, Command]
-) -> None:
-    """Test execution of Interface.commands_dict.
-
-    Args:
-        kwargs: dictionary of kwargs passed to constructor
-        result: expected result
-    """
-    iface = Interface(**kwargs)
-    assert iface.commands_dict == result
