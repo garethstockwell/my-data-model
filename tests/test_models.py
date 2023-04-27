@@ -1,27 +1,24 @@
 """Test cases for the models_attrs module."""
 
-import importlib
 from typing import Any
 from typing import List
 
-
-def import_class(model_name: str, module_name: str, class_name: str) -> Any:
-    """Import a class from a package."""
-    module = importlib.import_module(f"my_data_model.models_{model_name}.{module_name}")
-    return getattr(module, class_name)
+from my_data_model.utils import import_model_class
 
 
 def address(model_name: str) -> Any:
     """Test address type."""
-    Address = import_class(model_name, "types", "Address")  # noqa: N806
+    Address = import_model_class(model_name, "types", "Address")  # noqa: N806
     return Address(name="Address", description="An address", width=64)
 
 
 def construct_good_data(model_name: str) -> List[Any]:
     """Data for "construct_good" tests."""
-    Command = import_class(model_name, "commands", "Command")  # noqa: N806
-    CommandValue = import_class(model_name, "commands", "CommandValue")  # noqa: N806
-    Interface = import_class(model_name, "interfaces", "Interface")  # noqa: N806
+    Command = import_model_class(model_name, "commands", "Command")  # noqa: N806
+    CommandValue = import_model_class(  # noqa: N806
+        model_name, "commands", "CommandValue"
+    )
+    Interface = import_model_class(model_name, "interfaces", "Interface")  # noqa: N806
 
     return [
         # A command
@@ -67,9 +64,11 @@ def construct_good_data(model_name: str) -> List[Any]:
 
 def construct_invalid_type_data(model_name: str) -> List[Any]:
     """Data for "construct_invalid_type" tests."""
-    Command = import_class(model_name, "commands", "Command")  # noqa: N806
-    CommandValue = import_class(model_name, "commands", "CommandValue")  # noqa: N806
-    Interface = import_class(model_name, "interfaces", "Interface")  # noqa: N806
+    Command = import_model_class(model_name, "commands", "Command")  # noqa: N806
+    CommandValue = import_model_class(  # noqa: N806
+        model_name, "commands", "CommandValue"
+    )
+    Interface = import_model_class(model_name, "interfaces", "Interface")  # noqa: N806
 
     return [
         (cls, kwargs, errors[model_name])  # type: ignore
@@ -319,11 +318,13 @@ def construct_invalid_type_data(model_name: str) -> List[Any]:
 
 def construct_invalid_value_data(model_name: str) -> List[Any]:
     """Data for "construct_invalid_type" tests."""
-    Command = import_class(model_name, "commands", "Command")  # noqa: N806
-    CommandValue = import_class(model_name, "commands", "CommandValue")  # noqa: N806
-    Interface = import_class(model_name, "interfaces", "Interface")  # noqa: N806
-    Address = import_class(model_name, "types", "Address")  # noqa: N806
-    Array = import_class(model_name, "types", "Array")  # noqa: N806
+    Command = import_model_class(model_name, "commands", "Command")  # noqa: N806
+    CommandValue = import_model_class(  # noqa: N806
+        model_name, "commands", "CommandValue"
+    )
+    Interface = import_model_class(model_name, "interfaces", "Interface")  # noqa: N806
+    Address = import_model_class(model_name, "types", "Address")  # noqa: N806
+    Array = import_model_class(model_name, "types", "Array")  # noqa: N806
 
     return [
         # A width-templated type with a non-positive width

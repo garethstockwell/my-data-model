@@ -9,8 +9,6 @@ from typing import Any
 
 import click
 
-from my_data_model.io import load
-
 
 DEFAULT_DATA_PATH = Path(os.path.dirname(__file__)).parent / "data" / "model.yaml"
 
@@ -38,16 +36,6 @@ class Command(click.Command):
         """Command entry point."""
         _log_init(verbose=ctx.params["verbose"])
 
-        data_path = ctx.params["data_path"]
-        model = ctx.params["model"]
-
-        logging.info(f"Loading model {model} ...")
-
-        package = f"my_data_model.models_{model}"
-
-        with open(data_path) as stream:
-            ctx.obj = load(stream=stream, package=package)
-
         return super().invoke(ctx)
 
 
@@ -63,15 +51,6 @@ def command(func: Any) -> click.Command:
         help="Path to data",
         metavar="PATH",
         default=DEFAULT_DATA_PATH,
-        show_default=True,
-    )
-    @click.option(
-        "-m",
-        "--model",
-        "model",
-        help="Model to use",
-        type=click.Choice(["attrs", "pydantic"]),
-        default="attrs",
         show_default=True,
     )
     @click.option("-v", "--verbose", is_flag=True)
