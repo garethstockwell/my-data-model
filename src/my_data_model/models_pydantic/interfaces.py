@@ -5,12 +5,11 @@ from typing import List
 from pydantic import field_validator
 
 from my_data_model.models_pydantic.commands import Command
-from my_data_model.models_pydantic.common import model
+from my_data_model.models_pydantic.common import Model
 from my_data_model.utils import check_iterable_no_dups
 
 
-@model
-class Interface:
+class Interface(Model):
     """An interface."""
 
     commands: List[Command]

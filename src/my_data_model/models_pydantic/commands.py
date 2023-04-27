@@ -4,13 +4,12 @@ from typing import Mapping
 
 from pydantic import field_validator
 
-from my_data_model.models_pydantic.common import model
+from my_data_model.models_pydantic.common import Model
 from my_data_model.models_pydantic.types import GeneralType
 from my_data_model.utils import check_iterable_no_dups
 
 
-@model
-class CommandValue:
+class CommandValue(Model):
     """Command input or output value."""
 
     description: str
@@ -23,8 +22,7 @@ class CommandValue:
     """Type of the command value."""
 
 
-@model
-class Command:
+class Command(Model):
     """A command."""
 
     description: str
