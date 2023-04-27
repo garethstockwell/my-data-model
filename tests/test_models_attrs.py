@@ -83,7 +83,7 @@ def test_construct_good(cls: type, kwargs: Mapping[str, Any]) -> None:
                 "name": "cmd",
                 "type": TestAddress,
             },
-            "missing 1 required positional argument: 'description'",
+            "missing 1 required keyword-only argument: 'description'",
         ),
         # A command value with no name
         (
@@ -92,7 +92,7 @@ def test_construct_good(cls: type, kwargs: Mapping[str, Any]) -> None:
                 "description": "Command value",
                 "type": TestAddress,
             },
-            "missing 1 required positional argument: 'name'",
+            "missing 1 required keyword-only argument: 'name'",
         ),
         # A command value with no type
         (
@@ -101,7 +101,7 @@ def test_construct_good(cls: type, kwargs: Mapping[str, Any]) -> None:
                 "description": "Command value",
                 "name": "cmd",
             },
-            "missing 1 required positional argument: 'type'",
+            "missing 1 required keyword-only argument: 'type'",
         ),
         # A command value with a description of the incorrect type
         (
@@ -140,7 +140,7 @@ def test_construct_good(cls: type, kwargs: Mapping[str, Any]) -> None:
                 "inputs": {},
                 "name": "cmd",
             },
-            "missing 1 required positional argument: 'description'",
+            "missing 1 required keyword-only argument: 'description'",
         ),
         # A command with no inputs
         (
@@ -149,7 +149,7 @@ def test_construct_good(cls: type, kwargs: Mapping[str, Any]) -> None:
                 "description": "Example command",
                 "name": "cmd",
             },
-            "missing 1 required positional argument: 'inputs'",
+            "missing 1 required keyword-only argument: 'inputs'",
         ),
         # A command with no name
         (
@@ -158,7 +158,7 @@ def test_construct_good(cls: type, kwargs: Mapping[str, Any]) -> None:
                 "description": "Example command",
                 "inputs": {},
             },
-            "missing 1 required positional argument: 'name'",
+            "missing 1 required keyword-only argument: 'name'",
         ),
         # A command with a description of the incorrect type
         (
@@ -214,7 +214,7 @@ def test_construct_good(cls: type, kwargs: Mapping[str, Any]) -> None:
             {
                 "commands": [],
             },
-            "missing 1 required positional argument: 'name'",
+            "missing 1 required keyword-only argument: 'name'",
         ),
         # An interface with a name of the incorrect type
         (
@@ -231,7 +231,7 @@ def test_construct_good(cls: type, kwargs: Mapping[str, Any]) -> None:
             {
                 "name": "my-iface",
             },
-            "missing 1 required positional argument: 'commands'",
+            "missing 1 required keyword-only argument: 'commands'",
         ),
         # An interface with a wrongly typed command
         (
