@@ -134,9 +134,9 @@ def test_construct_good(cls: type, kwargs: Mapping[str, Any]) -> None:
                 "type": 123,
             },
             [
-                ("dict_type", tuple(["type", "Address"])),
-                ("dict_type", tuple(["type", "Array"])),
-                ("dict_type", tuple(["type", "Bits"])),
+                ("dataclass_type", tuple(["type", "Address"])),
+                ("dataclass_type", tuple(["type", "Array"])),
+                ("dataclass_type", tuple(["type", "Bits"])),
             ],
         ),
         # A command with no description
@@ -191,7 +191,7 @@ def test_construct_good(cls: type, kwargs: Mapping[str, Any]) -> None:
                 },
                 "name": "cmd",
             },
-            [("dict_type", tuple(["inputs", "X1"]))],
+            [("dataclass_type", tuple(["inputs", "X1"]))],
         ),
         # A command with a name of the incorrect type
         (
@@ -212,7 +212,7 @@ def test_construct_good(cls: type, kwargs: Mapping[str, Any]) -> None:
                 "inputs": {},
                 "name": "cmd",
             },
-            [("extra_forbidden", tuple(["foo"]))],
+            [("unexpected_keyword_argument", tuple(["foo"]))],
         ),
         # An interface with no name
         (
@@ -249,7 +249,7 @@ def test_construct_good(cls: type, kwargs: Mapping[str, Any]) -> None:
                 ],
                 "name": "my-iface",
             },
-            [("dict_type", tuple(["commands", 1]))],
+            [("dataclass_type", tuple(["commands", 1]))],
         ),
         # An interface with an additional invalid argument
         (
@@ -259,7 +259,7 @@ def test_construct_good(cls: type, kwargs: Mapping[str, Any]) -> None:
                 "foo": "bar",
                 "name": "my-iface",
             },
-            [("extra_forbidden", tuple(["foo"]))],
+            [("unexpected_keyword_argument", tuple(["foo"]))],
         ),
     ],
 )

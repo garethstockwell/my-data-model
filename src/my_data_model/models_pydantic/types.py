@@ -4,13 +4,15 @@ from typing import Union
 
 from pydantic import field_validator
 
-from my_data_model.models_pydantic.common import Model
+from my_data_model.models_pydantic.common import model
 
 
-class Type(Model):
+@model
+class Type:
     """Base class for types."""
 
 
+@model
 class _WidthTemplatedType(Type):
     """Base class for types which are instantiated at different widths."""
 
@@ -31,15 +33,18 @@ class _WidthTemplatedType(Type):
         return value
 
 
+@model
 class Address(_WidthTemplatedType):
     """An address type."""
 
 
+@model
 class Bits(_WidthTemplatedType):
     """A bitfield type."""
 
 
-class Array(Model):
+@model
+class Array(Type):
     """Array type."""
 
     description: str
