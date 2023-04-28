@@ -62,7 +62,7 @@ def construct_good_data(model_name: str) -> List[Any]:
     ]
 
 
-def construct_invalid_type_data(model_name: str) -> List[Any]:
+def construct_invalid_type_data(model_name: str, errors_name: str) -> List[Any]:
     """Data for "construct_invalid_type" tests."""
     Command = import_model_class(model_name, "commands", "Command")  # noqa: N806
     CommandValue = import_model_class(  # noqa: N806
@@ -71,7 +71,7 @@ def construct_invalid_type_data(model_name: str) -> List[Any]:
     Interface = import_model_class(model_name, "interfaces", "Interface")  # noqa: N806
 
     return [
-        (cls, kwargs, errors[model_name])  # type: ignore
+        (cls, kwargs, errors[errors_name])  # type: ignore
         for (cls, kwargs, errors) in [
             # A command value with no description
             (

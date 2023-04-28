@@ -4,7 +4,7 @@ from typing import Union
 
 from pydantic import field_validator
 
-from my_data_model.models_pydantic.common import model
+from my_data_model.models_pydantic_dc.common import model
 
 
 @model

@@ -73,18 +73,7 @@ commands:
 
 def raw_load(source: str) -> Any:
     """Load raw data."""
-
-    class SafeLoaderIgnoreUnknown(yaml.SafeLoader):
-        def ignore_unknown(self, node):
-            return None
-
-    SafeLoaderIgnoreUnknown.add_constructor(
-        None, SafeLoaderIgnoreUnknown.ignore_unknown
-    )
-
-    return yaml.load(  # type: ignore # nosec B506
-        source, Loader=SafeLoaderIgnoreUnknown
-    )
+    return yaml.safe_load(source)
 
 
 def model_load(source: str, model: str) -> Any:
@@ -149,7 +138,7 @@ def perf(*args: Any, **kwargs: Any) -> None:
     average_raw = elapsed / repeats
     logging.info(f"Average raw_load              {average_raw:.6f} s")
 
-    for model in ["attrs", "pydantic"]:
+    for model in ["attrs", "pydantic_dc"]:
         logging.info("")
         start = time.time()
         for _i in range(0, repeats):

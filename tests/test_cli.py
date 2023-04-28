@@ -16,11 +16,7 @@ def runner() -> CliRunner:
 
 @pytest.mark.parametrize(
     "args",
-    [
-        [],
-        ["dump"],
-        ["dump", "--verbose"],
-    ],
+    [[], ["dump"], ["dump", "--verbose"], ["perf", "--repeats", "1"]],
 )
 def test_main_succeeds(runner: CliRunner, args: List[str]) -> None:
     """It exits with a status code of zero."""

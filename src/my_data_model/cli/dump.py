@@ -16,7 +16,7 @@ from my_data_model.io import load
     "--model",
     "model",
     help="Model to use",
-    type=click.Choice(["attrs", "pydantic"]),
+    type=click.Choice(["attrs", "pydantic_dc"]),
     default="attrs",
     show_default=True,
 )

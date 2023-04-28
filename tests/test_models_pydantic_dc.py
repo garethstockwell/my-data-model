@@ -1,4 +1,4 @@
-"""Test cases for the models_pydantic module."""
+"""Test cases for the models_pydantic module with dataclasses."""
 
 from typing import Any
 from typing import List
@@ -7,8 +7,8 @@ from typing import Mapping
 import pytest
 from pydantic import ValidationError
 
-from my_data_model.models_pydantic.types import Array
-from my_data_model.models_pydantic.types import Bits
+from my_data_model.models_pydantic_dc.types import Array
+from my_data_model.models_pydantic_dc.types import Bits
 from tests.test_models import construct_good_data
 from tests.test_models import construct_invalid_type_data
 from tests.test_models import construct_invalid_value_data
@@ -18,7 +18,7 @@ TestBits64 = Bits(name="Bits64", description="A 64-bit field", width=64)
 """An address used for test purposes."""
 
 
-@pytest.mark.parametrize("cls, kwargs", construct_good_data("pydantic"))
+@pytest.mark.parametrize("cls, kwargs", construct_good_data("pydantic_dc"))
 def test_construct_good(cls: type, kwargs: Mapping[str, Any]) -> None:
     """Test successful construction of models.
 
@@ -29,7 +29,9 @@ def test_construct_good(cls: type, kwargs: Mapping[str, Any]) -> None:
     cls(**kwargs)
 
 
-@pytest.mark.parametrize("cls, kwargs, errors", construct_invalid_type_data("pydantic"))
+@pytest.mark.parametrize(
+    "cls, kwargs, errors", construct_invalid_type_data("pydantic_dc", "pydantic")
+)
 def test_construct_invalid_type(
     cls: type, kwargs: Mapping[str, Any], errors: List[Any]
 ) -> None:
@@ -47,7 +49,7 @@ def test_construct_invalid_type(
 
 
 @pytest.mark.parametrize(
-    "cls, kwargs, errors", construct_invalid_value_data("pydantic")
+    "cls, kwargs, errors", construct_invalid_value_data("pydantic_dc")
 )
 def test_construct_invalid_value(
     cls: type, kwargs: Mapping[str, Any], errors: str
