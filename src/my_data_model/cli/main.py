@@ -53,7 +53,9 @@ def command(func: Any) -> click.Command:
         default=DEFAULT_DATA_PATH,
         show_default=True,
     )
-    @click.option("-v", "--verbose", is_flag=True)
+    @click.option(
+        "-v", "--verbose", help="Increase verbosity of console output", is_flag=True
+    )
     @functools.wraps(func)
     def wrapper(*args: Any, **kwargs: Any) -> Any:
         return func(*args, **kwargs)

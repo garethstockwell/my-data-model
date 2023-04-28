@@ -1,1 +1,1 @@
-"""Data model, defined using pydantic library."""
+"""Data model, defined using pydantic library and BaseModel class."""

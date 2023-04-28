@@ -96,7 +96,7 @@ def model_load(source: str, model: str) -> Any:
     "-i",
     "--inputs",
     "inputs",
-    help="Number of inputs",
+    help="Number of input values per command",
     type=int,
     default=10,
     show_default=True,
@@ -118,16 +118,19 @@ def perf(*args: Any, **kwargs: Any) -> None:
     inputs = ctx.params["inputs"]
     repeats = ctx.params["repeats"]
 
-    logging.info(f"Repeats   {repeats}")
-    logging.info(f"Commands  {commands}")
-    logging.info(f"Inputs    {inputs}")
+    logging.info(f"Number of repeats                    {repeats}")
+    logging.info(f"Number of commands                   {commands}")
+    logging.info(f"Number of input values per command   {inputs}")
 
+    # Synthesize YAML source without tags
     raw_source = make_source(commands=commands, inputs=inputs, tag=False)
     logging.debug(f"raw_source:\n{raw_source}")
 
+    # Synthesize YAML source with tags
     tagged_source = make_source(commands=commands, inputs=inputs, tag=True)
     logging.debug(f"tagged_source:\n{tagged_source}")
 
+    # Measure time taken to parse YAML, without tags / constructors
     start = time.time()
     for _i in range(0, repeats):
         data = raw_load(source=raw_source)
@@ -138,6 +141,7 @@ def perf(*args: Any, **kwargs: Any) -> None:
     average_raw = elapsed / repeats
     logging.info(f"Average raw_load              {average_raw:.6f} s")
 
+    # Measure time taken to parse YAML, validate data and create model objects
     for model in ["attrs", "pydantic_bm", "pydantic_dc"]:
         logging.info("")
         start = time.time()
@@ -150,5 +154,6 @@ def perf(*args: Any, **kwargs: Any) -> None:
         average_model = elapsed / repeats
         logging.info(f"{model + ' average':30s}{average_model:.6f} s")
 
+        # Compute overhead compared to parsing YAML without tags / constructors
         average_overhead = average_model - average_raw
         logging.info(f"{model + ' average overhead':30s}{average_overhead:.6f} s")
