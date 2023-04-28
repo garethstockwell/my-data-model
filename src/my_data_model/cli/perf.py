@@ -138,7 +138,7 @@ def perf(*args: Any, **kwargs: Any) -> None:
     average_raw = elapsed / repeats
     logging.info(f"Average raw_load              {average_raw:.6f} s")
 
-    for model in ["attrs", "pydantic_dc"]:
+    for model in ["attrs", "pydantic_bm", "pydantic_dc"]:
         logging.info("")
         start = time.time()
         for _i in range(0, repeats):

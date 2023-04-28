@@ -27,9 +27,7 @@ def test_construct_good(cls: type, kwargs: Mapping[str, Any]) -> None:
     cls(**kwargs)
 
 
-@pytest.mark.parametrize(
-    "cls, kwargs, errors", construct_invalid_type_data("attrs", "attrs")
-)
+@pytest.mark.parametrize("cls, kwargs, errors", construct_invalid_type_data("attrs"))
 def test_construct_invalid_type(
     cls: type, kwargs: Mapping[str, Any], errors: str
 ) -> None:

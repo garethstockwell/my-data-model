@@ -62,7 +62,7 @@ def construct_good_data(model_name: str) -> List[Any]:
     ]
 
 
-def construct_invalid_type_data(model_name: str, errors_name: str) -> List[Any]:
+def construct_invalid_type_data(model_name: str) -> List[Any]:
     """Data for "construct_invalid_type" tests."""
     Command = import_model_class(model_name, "commands", "Command")  # noqa: N806
     CommandValue = import_model_class(  # noqa: N806
@@ -71,7 +71,7 @@ def construct_invalid_type_data(model_name: str, errors_name: str) -> List[Any]:
     Interface = import_model_class(model_name, "interfaces", "Interface")  # noqa: N806
 
     return [
-        (cls, kwargs, errors[errors_name])  # type: ignore
+        (cls, kwargs, errors[model_name])  # type: ignore
         for (cls, kwargs, errors) in [
             # A command value with no description
             (
@@ -82,7 +82,8 @@ def construct_invalid_type_data(model_name: str, errors_name: str) -> List[Any]:
                 },
                 {
                     "attrs": "missing 1 required keyword-only argument: 'description'",
-                    "pydantic": [("missing", tuple(["description"]))],
+                    "pydantic_bm": [("missing", tuple(["description"]))],
+                    "pydantic_dc": [("missing", tuple(["description"]))],
                 },
             ),
             # A command value with no name
@@ -94,7 +95,8 @@ def construct_invalid_type_data(model_name: str, errors_name: str) -> List[Any]:
                 },
                 {
                     "attrs": "missing 1 required keyword-only argument: 'name'",
-                    "pydantic": [("missing", tuple(["name"]))],
+                    "pydantic_bm": [("missing", tuple(["name"]))],
+                    "pydantic_dc": [("missing", tuple(["name"]))],
                 },
             ),
             # A command value with no type
@@ -106,7 +108,8 @@ def construct_invalid_type_data(model_name: str, errors_name: str) -> List[Any]:
                 },
                 {
                     "attrs": "missing 1 required keyword-only argument: 'type'",
-                    "pydantic": [("missing", tuple(["type"]))],
+                    "pydantic_bm": [("missing", tuple(["type"]))],
+                    "pydantic_dc": [("missing", tuple(["type"]))],
                 },
             ),
             # A command value with a description of the incorrect type
@@ -119,7 +122,8 @@ def construct_invalid_type_data(model_name: str, errors_name: str) -> List[Any]:
                 },
                 {
                     "attrs": "'description' must be",
-                    "pydantic": [("string_type", tuple(["description"]))],
+                    "pydantic_bm": [("string_type", tuple(["description"]))],
+                    "pydantic_dc": [("string_type", tuple(["description"]))],
                 },
             ),
             # A command value with a name of the incorrect type
@@ -132,7 +136,8 @@ def construct_invalid_type_data(model_name: str, errors_name: str) -> List[Any]:
                 },
                 {
                     "attrs": "'name' must be",
-                    "pydantic": [("string_type", tuple(["name"]))],
+                    "pydantic_bm": [("string_type", tuple(["name"]))],
+                    "pydantic_dc": [("string_type", tuple(["name"]))],
                 },
             ),
             # A command value with a type of the incorrect type
@@ -145,7 +150,12 @@ def construct_invalid_type_data(model_name: str, errors_name: str) -> List[Any]:
                 },
                 {
                     "attrs": "'type' must be",
-                    "pydantic": [
+                    "pydantic_bm": [
+                        ("dict_type", tuple(["type", "Address"])),
+                        ("dict_type", tuple(["type", "Array"])),
+                        ("dict_type", tuple(["type", "Bits"])),
+                    ],
+                    "pydantic_dc": [
                         ("dataclass_type", tuple(["type", "Address"])),
                         ("dataclass_type", tuple(["type", "Array"])),
                         ("dataclass_type", tuple(["type", "Bits"])),
@@ -161,7 +171,8 @@ def construct_invalid_type_data(model_name: str, errors_name: str) -> List[Any]:
                 },
                 {
                     "attrs": "missing 1 required keyword-only argument: 'description'",
-                    "pydantic": [("missing", tuple(["description"]))],
+                    "pydantic_bm": [("missing", tuple(["description"]))],
+                    "pydantic_dc": [("missing", tuple(["description"]))],
                 },
             ),
             # A command with no inputs
@@ -173,7 +184,8 @@ def construct_invalid_type_data(model_name: str, errors_name: str) -> List[Any]:
                 },
                 {
                     "attrs": "missing 1 required keyword-only argument: 'inputs'",
-                    "pydantic": [("missing", tuple(["inputs"]))],
+                    "pydantic_bm": [("missing", tuple(["inputs"]))],
+                    "pydantic_dc": [("missing", tuple(["inputs"]))],
                 },
             ),
             # A command with no name
@@ -185,7 +197,8 @@ def construct_invalid_type_data(model_name: str, errors_name: str) -> List[Any]:
                 },
                 {
                     "attrs": "missing 1 required keyword-only argument: 'name'",
-                    "pydantic": [("missing", tuple(["name"]))],
+                    "pydantic_bm": [("missing", tuple(["name"]))],
+                    "pydantic_dc": [("missing", tuple(["name"]))],
                 },
             ),
             # A command with a description of the incorrect type
@@ -198,7 +211,8 @@ def construct_invalid_type_data(model_name: str, errors_name: str) -> List[Any]:
                 },
                 {
                     "attrs": "'description' must be",
-                    "pydantic": [("string_type", tuple(["description"]))],
+                    "pydantic_bm": [("string_type", tuple(["description"]))],
+                    "pydantic_dc": [("string_type", tuple(["description"]))],
                 },
             ),
             # A command with an input of the incorrect type
@@ -218,7 +232,8 @@ def construct_invalid_type_data(model_name: str, errors_name: str) -> List[Any]:
                 },
                 {
                     "attrs": "'inputs' must be",
-                    "pydantic": [("dataclass_type", tuple(["inputs", "X1"]))],
+                    "pydantic_bm": [("dict_type", tuple(["inputs", "X1"]))],
+                    "pydantic_dc": [("dataclass_type", tuple(["inputs", "X1"]))],
                 },
             ),
             # A command with a name of the incorrect type
@@ -231,7 +246,8 @@ def construct_invalid_type_data(model_name: str, errors_name: str) -> List[Any]:
                 },
                 {
                     "attrs": "'name' must be",
-                    "pydantic": [("string_type", tuple(["name"]))],
+                    "pydantic_bm": [("string_type", tuple(["name"]))],
+                    "pydantic_dc": [("string_type", tuple(["name"]))],
                 },
             ),
             # A command with an additional invalid argument
@@ -245,7 +261,8 @@ def construct_invalid_type_data(model_name: str, errors_name: str) -> List[Any]:
                 },
                 {
                     "attrs": "got an unexpected keyword argument 'foo'",
-                    "pydantic": [("unexpected_keyword_argument", tuple(["foo"]))],
+                    "pydantic_bm": [("extra_forbidden", tuple(["foo"]))],
+                    "pydantic_dc": [("unexpected_keyword_argument", tuple(["foo"]))],
                 },
             ),
             # An interface with no name
@@ -256,7 +273,8 @@ def construct_invalid_type_data(model_name: str, errors_name: str) -> List[Any]:
                 },
                 {
                     "attrs": "missing 1 required keyword-only argument: 'name'",
-                    "pydantic": [("missing", tuple(["name"]))],
+                    "pydantic_bm": [("missing", tuple(["name"]))],
+                    "pydantic_dc": [("missing", tuple(["name"]))],
                 },
             ),
             # An interface with a name of the incorrect type
@@ -268,7 +286,8 @@ def construct_invalid_type_data(model_name: str, errors_name: str) -> List[Any]:
                 },
                 {
                     "attrs": "'name' must be <class 'str'>",
-                    "pydantic": [("string_type", tuple(["name"]))],
+                    "pydantic_bm": [("string_type", tuple(["name"]))],
+                    "pydantic_dc": [("string_type", tuple(["name"]))],
                 },
             ),
             # An interface with no commands
@@ -279,7 +298,8 @@ def construct_invalid_type_data(model_name: str, errors_name: str) -> List[Any]:
                 },
                 {
                     "attrs": "missing 1 required keyword-only argument: 'commands'",
-                    "pydantic": [("missing", tuple(["commands"]))],
+                    "pydantic_bm": [("missing", tuple(["commands"]))],
+                    "pydantic_dc": [("missing", tuple(["commands"]))],
                 },
             ),
             # An interface with a wrongly typed command
@@ -296,7 +316,8 @@ def construct_invalid_type_data(model_name: str, errors_name: str) -> List[Any]:
                 },
                 {
                     "attrs": "'commands' must be",
-                    "pydantic": [("dataclass_type", tuple(["commands", 1]))],
+                    "pydantic_bm": [("dict_type", tuple(["commands", 1]))],
+                    "pydantic_dc": [("dataclass_type", tuple(["commands", 1]))],
                 },
             ),
             # An interface with an additional invalid argument
@@ -309,7 +330,8 @@ def construct_invalid_type_data(model_name: str, errors_name: str) -> List[Any]:
                 },
                 {
                     "attrs": "got an unexpected keyword argument 'foo'",
-                    "pydantic": [("unexpected_keyword_argument", tuple(["foo"]))],
+                    "pydantic_bm": [("extra_forbidden", tuple(["foo"]))],
+                    "pydantic_dc": [("unexpected_keyword_argument", tuple(["foo"]))],
                 },
             ),
         ]
