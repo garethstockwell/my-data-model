@@ -13,11 +13,11 @@ from my_data_model.cli.main import command
 from my_data_model.io import load
 
 
-def make_source(tag: bool) -> str:
+def make_source(commands: int, inputs: int, tag: bool) -> str:
     """Make YAML source."""
 
     def make_tag(name: str, tag: bool) -> str:
-        return f"!{name}" if tag else ""
+        return f"!{name}" if tag else f"#{name}"
 
     def dedent(value: str) -> str:
         return textwrap.dedent(
@@ -28,28 +28,47 @@ def make_source(tag: bool) -> str:
         space = " " * len(prefix)
         return prefix + ("\n" + space).join(value.split("\n"))
 
-    def make_command(index: int, tag: bool) -> str:
+    def make_input(index: int, tag: bool) -> str:
+        return dedent(
+            f"""
+{make_tag(name="commands.CommandValue", tag=tag)}
+name: Input{index}
+description: Example input {index}
+type: {make_tag(name="types.Address", tag=tag)}
+  name: Address
+  description: An address
+  width: 64
+"""
+        )
+
+    def make_command(inputs: int, index: int, tag: bool) -> str:
         return dedent(
             f"""
 {make_tag(name="commands.Command", tag=tag)}
 name: Cmd{index}
 description: Example command {index}
-inputs: {{}}
+inputs:
 """
+            + "\n".join(
+                indent(f"  X{index}: ", make_input(index=index, tag=tag))
+                for index in range(0, inputs)
+            )
         )
 
-    def make_interface(tag: bool) -> str:
+    def make_interface(commands: int, inputs: int, tag: bool) -> str:
         return dedent(
             f"""
 {make_tag(name="interfaces.Interface", tag=tag)}
 name: Iface1
 commands:
-{indent(" - ", make_command(index=0, tag=tag))}
-{indent(" - ", make_command(index=1, tag=tag))}
 """
+            + "\n".join(
+                indent(" - ", make_command(index=index, inputs=inputs, tag=tag))
+                for index in range(0, commands)
+            )
         )
 
-    return make_interface(tag=tag)
+    return make_interface(commands=commands, inputs=inputs, tag=tag)
 
 
 def raw_load(source: str) -> Any:
@@ -81,7 +100,16 @@ def model_load(source: str, model: str) -> Any:
     "commands",
     help="Number of commands",
     type=int,
-    default=3,
+    default=50,
+    show_default=True,
+)
+@click.option(
+    "-i",
+    "--inputs",
+    "inputs",
+    help="Number of inputs",
+    type=int,
+    default=10,
     show_default=True,
 )
 @click.option(
@@ -90,22 +118,26 @@ def model_load(source: str, model: str) -> Any:
     "repeats",
     help="Number of repeats",
     type=int,
-    default=10000,
+    default=100,
     show_default=True,
 )
 def perf(*args: Any, **kwargs: Any) -> None:
     """Command which measures performance of model loading and validation."""
     ctx = click.get_current_context()
 
-    raw_source = make_source(tag=False)
-    logging.debug(f"raw_source:\n{raw_source}")
-
-    tagged_source = make_source(tag=True)
-    logging.debug(f"tagged_source:\n{tagged_source}")
-
+    commands = ctx.params["commands"]
+    inputs = ctx.params["inputs"]
     repeats = ctx.params["repeats"]
 
-    logging.info(f"Repeats                       {repeats}")
+    logging.info(f"Repeats   {repeats}")
+    logging.info(f"Commands  {commands}")
+    logging.info(f"Inputs    {inputs}")
+
+    raw_source = make_source(commands=commands, inputs=inputs, tag=False)
+    logging.debug(f"raw_source:\n{raw_source}")
+
+    tagged_source = make_source(commands=commands, inputs=inputs, tag=True)
+    logging.debug(f"tagged_source:\n{tagged_source}")
 
     start = time.time()
     for _i in range(0, repeats):
